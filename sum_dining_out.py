@@ -63,7 +63,7 @@ def main(excel_path: str) -> None:
         raise FileNotFoundError(f"Excel file not found: {path}")
 
     try:
-        workbook = load_workbook(path, data_only=True)
+        workbook = load_workbook(path, data_only=True, read_only=True)
     except PermissionError as exc:
         raise PermissionError(
             f"Permission denied when opening Excel file: {path}. "
@@ -78,12 +78,18 @@ def main(excel_path: str) -> None:
 
     grand_total = 0.0
 
-    for sheet in iter_matching_sheets(workbook):
-        sheet_total = sum_dining_out_values(sheet)
-        print(f"Sheet '{sheet.title}': {sheet_total}")
-        grand_total += sheet_total
+    try:
+        for sheet in iter_matching_sheets(workbook):
+            sheet_total = sum_dining_out_values(sheet)
+            grand_total += sheet_total
+            print(f"Sheet '{sheet.title}': {sheet_total:.2f} Grand total so far: {grand_total:.2f}")
 
-    print(f"\nGrand total for '{TARGET_CATEGORY}': {grand_total}")
+        print(f"\nGrand total for '{TARGET_CATEGORY}': {grand_total}")
+    finally:
+        try:
+            workbook.close()
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":
