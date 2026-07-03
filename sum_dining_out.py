@@ -23,7 +23,7 @@ from openpyxl import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
 SHEET_NAME_PATTERN = re.compile(r"^\d{2} \d{4}$")
-TARGET_CATEGORY = "Dinning Out"
+TARGET_CATEGORY = "Gas"
 START_ROW = 21  # After row 20
 COLUMN_C = 3
 COLUMN_D = 4
